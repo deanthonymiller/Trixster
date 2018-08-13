@@ -10,6 +10,10 @@ class RegisterPage extends Component {
       username: '',
       password: '',
       message: '',
+      first_name:'',
+      last_name:'',
+      email:'',
+      city_state:'',
     };
   }
 
@@ -24,6 +28,10 @@ class RegisterPage extends Component {
       const body = {
         username: this.state.username,
         password: this.state.password,
+        first_name:this.state.first_name,
+        last_name:this.state.last_name,
+        email:this.state.email,
+        city_state:this.state.city_state,
       };
 
       // making the request to the server to post the new user's registration
@@ -90,6 +98,50 @@ class RegisterPage extends Component {
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="first_name">
+              First Name:
+              <input
+                type="first_name"
+                name="first_name"
+                value={this.state.first_name}
+                onChange={this.handleInputChangeFor('first_name')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="last_name">
+              Last Name:
+              <input
+                type="last_name"
+                name="last_name"
+                value={this.state.last_name}
+                onChange={this.handleInputChangeFor('last_name')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="email">
+              Email address:
+              <input
+                type="email"
+                name="email"
+                value={this.state.email}
+                onChange={this.handleInputChangeFor('email')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="city_state">
+              City & State
+              <input
+                type="city_state"
+                name="city_state"
+                value={this.state.city_state}
+                onChange={this.handleInputChangeFor('city_state')}
               />
             </label>
           </div>
