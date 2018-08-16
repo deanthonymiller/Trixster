@@ -1,0 +1,27 @@
+.question{
+    height: 100px;
+    width: 500px;
+  
+   
+}
+
+.center{
+    text-align: center;
+    
+}
+
+.ask{
+    text-decoration: underline;
+}
+
+.title{
+    width: 200px;
+}
+
+.sport{
+    width: 150px
+}
+
+question_text{
+    word-break: break-all
+}

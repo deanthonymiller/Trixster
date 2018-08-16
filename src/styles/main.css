@@ -51,6 +51,7 @@ input[type="submit"] {
   background-color: #00acb0;
   width: 100%;
   border-radius: 0px;
+  
 }
 
 ul {
@@ -78,3 +79,4 @@ li a:hover {
     text-decoration: underline;
     color: #eee;
 }
+
