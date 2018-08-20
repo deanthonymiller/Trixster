@@ -13,15 +13,20 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
 import SearchResults  from './components/SearchResults/SearchResults'
+import IndQuestionPage from './components/IndQuestionPage/IndQuestionPage'
+import Question from './components/IndQuestionPage/Question'
 import './styles/main.css';
 
 const App = () => (
   <div>
-    <Header />
+     <Router><Header /></Router>
+    
     
     <Router>
+    
       <Switch>
         <Redirect exact from="/" to="/home" />
+        
         <Route
           path="/home"
           component={LoginPage}
@@ -42,7 +47,14 @@ const App = () => (
           path="/search"
           component={SearchResults}
         />
-  
+        <Route
+          path="/question"
+          component={IndQuestionPage}
+        />
+        <Route
+          path="/thisQuestion"
+          component={Question}
+        />
         {/* OTHERWISE (no path!!!) */}
         <Route render={() => <h1>404</h1>} />
 

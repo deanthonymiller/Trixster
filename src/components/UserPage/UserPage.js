@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import FormData from 'form-data'
 import { connect } from 'react-redux';
+// import NavTwo from '../NavTwo/NavTwo'
 
 import Nav from '../../components/Nav/Nav';
 
@@ -76,6 +77,7 @@ class UserPage extends Component {
 
     return (
       <div className="nav">
+       
         <Nav />
       
         { content }

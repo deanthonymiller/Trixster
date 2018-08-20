@@ -40,7 +40,9 @@ class InfoPage extends Component {
     this.props.dispatch({
       type:'POST_QUESTION',
       payload: this.state
+      
     })
+    // this.props.history.push('/thisQuestion')
   }
 
 
@@ -63,12 +65,18 @@ class InfoPage extends Component {
             <textarea className="question" onChange={this.handleChangeInput('question_text')} type="text" placeholder="Question" />
             <br />
             <br />
-            <textarea className="sport" onChange={this.handleChangeInput('type_of_sport')}type="text" placeholder="type of Sport" />
+            <select className="sport" onChange={this.handleChangeInput('type_of_sport')}type="text" placeholder="type of Sport"> 
+            <option selected>chose a sport</option>
+            <option value="snowboarding">Snowboarding</option>
+            <option value="rollerBlade">Rollerblade</option>
+            <option value="skateboarding">Skateboarding</option>
+            <option value="bmx">Bmx</option>
+            </select>
             <br />
             <br />
             <button onClick={this.addQuestion}>Post!</button>
           </div>
-           <p>{JSON.stringify(this.state)}</p>
+           <p>{JSON.stringify(this.state.type_of_sport)}</p>
         </div>
       );
     }
