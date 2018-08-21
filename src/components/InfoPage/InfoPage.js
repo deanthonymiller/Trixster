@@ -42,7 +42,7 @@ class InfoPage extends Component {
       payload: this.state
       
     })
-    // this.props.history.push('/thisQuestion')
+    this.props.history.push('/user')
   }
 
 

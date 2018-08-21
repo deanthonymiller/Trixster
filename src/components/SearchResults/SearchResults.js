@@ -25,8 +25,8 @@ const styles = theme => ({
 class SearchResults extends Component{
 
 
-componentDidMount(){
-    console.log(this.props.state)
+componentDidMount(id){
+    
 }
 
 indQuestion = (id) =>{
@@ -34,7 +34,7 @@ indQuestion = (id) =>{
     
     this.props.dispatch({
         type:'GET_THIS_QUESTION',
-        payload: id
+        payload:id
     })
     // window.location.href= `/#/question`;
     this.props.history.push('/question')
@@ -42,14 +42,20 @@ indQuestion = (id) =>{
     
 }
 
+ 
+
     render(){
 
 let questionList = this.props.state.questionItems.map((question, index) => {
-        return <Card className={this.props.classes.card} key={index} onClick={this.indQuestion.bind(this,question.id)}>
+        // return <Card className={this.props.classes.card} key={index} onClick={this.indQuestion.bind(this,question.id)}>
+                return <Card key={index} className={this.props.classes.card} onClick={()=> this.props.history.push(`/question/${question.id}`)}>
                 
-                <li className="card">
+                
+                <li className="card" >
                 {question.question_text}
+                {question.id}
                 </li>
+                
                </Card>
                
 })

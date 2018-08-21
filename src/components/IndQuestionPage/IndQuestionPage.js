@@ -8,6 +8,7 @@ import Card from '@material-ui/core/Card';
 // import CardMedia from '@material-ui/core/CardMedia';
 // import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
+import { withRouter } from 'react-router'
 import { withStyles } from '@material-ui/core';
 
 const mapStateToProps = state =>({
@@ -42,20 +43,39 @@ const styles = theme => ({
       
 })
 
+
+
 class IndQuestionPage extends Component{
     constructor(props){
         super(props)
         this.state={
-            comments:''
+            comments:'',
+            show: false
+
         }
     }
 
-    componentDidMount(){
+    componentDidMount(state){ 
+       console.log(this.props.match.params.id);
        this.getComments()
+        let question_id = this.props.match.params.id
+       this.props.dispatch({
+           type:'ANOTHER_QUESTION',
+           payload: question_id
+       })
+       
+    }
+
+    handleChangeFor= (propertyName) => (event) =>{  
+        this.setState({
+            ...this.state,
+            [propertyName]: event.target.value
+        }) 
+        console.log(this.state);
     }
 
     getComments = (state) =>{
-        let id = this.props.state.questionItems[0].id
+        let id = this.props.match.params.id
         console.log('hello', id);
         this.props.dispatch({
             type:'GET_IND_QUESTION_RESPONSE',
@@ -64,13 +84,7 @@ class IndQuestionPage extends Component{
         })
     }
 
-    handleChangeFor= (propertyName) => (event) =>{
-        this.setState({
-            ...this.state,
-            [propertyName]: event.target.value
-        }) 
-        console.log(this.state);
-    }
+    
 
     addAnswer = (id) =>{
         console.log(id);
@@ -83,35 +97,35 @@ class IndQuestionPage extends Component{
                 id
            } 
         })
-        this.getComments()
     }
 
     deleteQuestion = (id) =>{
-        // console.log(this.props.state.user.id);
-        // console.log(this.props.state.questionItems[0].id);
-
-        let userId = this.props.state.user.id
-        console.log(userId);
         console.log(id);
-        let questionId = this.props.state.questionItems[0].id
+        let questionId = this.props.match.params.id
         
         this.props.dispatch({
             type:'DELETE_QUESTION',
             payload:{
                  questionId,
-            }
-               
-            
-            
-            
+            }    
         })
-
-        
+        this.props.history.push('/user')
     }
 
+    deleteAnswer = (id) => {
+        console.log(id);
+        let questionId = this.props.match.params.id
+        this.props.dispatch({
+            type:'DELETE_ID_ANSWER',
+            payload:{
+                id, questionId
+            } 
+        })
+       
+    }
     
     render(){
-        let questionList = this.props.state.questionItems.map((question, index) => {
+        let questionList = this.props.state.correctStuff.map((question, index) => {
             return <div key={index}>
                     
                     <Card className={this.props.classes.card}>
@@ -126,9 +140,8 @@ class IndQuestionPage extends Component{
                     className={this.props.classes.media} onChange={this.handleChangeFor('comments')}
                      placeholder="answer that question"/>
                       <br />
-                  
-                    <button onClick={this.addAnswer.bind(this,question.id)}  >post</button>
-                    <button onClick={this.deleteQuestion.bind(this, question.id)}></button>
+                    <button onClick={this.addAnswer.bind(this,question.id)} >post</button>
+                    <button onClick={this.deleteQuestion.bind(this, question.id)}>delete</button>
                     </div>
                     <hr />
                    </div>        
@@ -137,8 +150,12 @@ class IndQuestionPage extends Component{
 
     const answerOfQuestion = this.props.state.answerItems.map((answer, index) => {
         return <div key={index}>
+                 <br /> 
                 <Card className={this.props.classes.color}> {answer.comments}</Card>
+             
+                <button onClick={this.deleteAnswer.bind(this, answer.id)}>delete</button>
                 <br />
+            
                </div>
                
     })
@@ -171,4 +188,4 @@ class IndQuestionPage extends Component{
 }
 
 
-export default connect(mapStateToProps)(withStyles(styles)(IndQuestionPage));
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(IndQuestionPage)));

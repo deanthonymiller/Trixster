@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-// import FormData from 'form-data'
 import { connect } from 'react-redux';
-// import NavTwo from '../NavTwo/NavTwo'
-
 import Nav from '../../components/Nav/Nav';
-
-
 import '../../styles/main.css'
-
+import * as filestack from 'filestack-js';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { triggerLogout } from '../../redux/actions/loginActions';
 import { withStyles } from '@material-ui/core';
@@ -15,21 +10,27 @@ import { withStyles } from '@material-ui/core';
 
 const mapStateToProps = state => ({
   user: state.user,
+  state
 });
 const styles = theme => ({
-
+  center:{
+    paddingLeft: '1000px'
+  }
 })
 
 class UserPage extends Component {
   constructor(props){
     super(props)
     this.state ={
-      profile_picture:null
+      file:''
     
   }
 }
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+    this.props.dispatch({
+      type:'GET_USER_QUESTIONS'
+    })
   }
 
   componentDidUpdate() {
@@ -51,14 +52,43 @@ class UserPage extends Component {
         });
     }
 
+    getUserQuestions = () => {
+     console.log(this.props.state.userQuestions);
+     
+    }
+
+
     postPicture = () =>{
-      // let fd = new FormData();
-      // fd.append('image', this.state.profile_picture)
-      // axios.put(`/api/trick/profilePic`,fd)
-      // this.props.history.push('search');
+  const apiKey = 'ARzYlU4xfRaiK1QMTe6Qpz';
+  const client = filestack.init(apiKey);
+  let file = this.state
+
+
+  client.upload(file)
+  .then(res => {
+    console.log('success:', res);
+  }).catch(err => {
+    console.log(err);
+    
+  })
+      
     }
     
   render() {
+
+    const userQuest = this.props.state.userQuestions.map((question, index) => {
+        return <div key={index} >
+            <div className={this.props.classes.center } onClick={()=> this.props.history.push(`/question/${question.id}`)}>
+              {question.question_text}              
+            </div>
+              
+             
+            
+        </div>
+    })
+
+
+
     let content = null;
 
     if (this.props.user.userName) {
@@ -82,12 +112,20 @@ class UserPage extends Component {
       
         { content }
        <div>
-
-         <img src={this.state.profile_picture} alt=""/>
-         <br />
-         <input type="file" onChange={this.handleChangeFor('profile_picture')}/>
-         <button onClick={this.postPicture}>Upload</button>
-
+       <div className="container">
+   
+  </div>
+         <section>
+              <img src={this.state.profile_picture} alt=""/>
+              <br />
+              <input type="file" onChange={this.handleChangeFor('file')}/>
+              <button onClick={this.postPicture}>Upload</button>
+              <button onClick={this.getUserQuestions}>go</button>
+             
+          
+          {userQuest}
+          </section>
+          <button onClick={this.postPicture}></button>
        </div>
       </div>
     );

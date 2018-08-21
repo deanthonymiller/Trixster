@@ -13,6 +13,9 @@ export default function* rootSaga() {
     yield takeEvery('POST_ANSWER',postAnswer ),
     yield takeEvery('GET_IND_QUESTION_RESPONSE', getAnswers),
     yield takeEvery('DELETE_QUESTION', deleteQuestion),
+    yield takeEvery('GET_USER_QUESTIONS', userQuestions),
+    yield takeEvery('ANOTHER_QUESTION', getAnotherQuestion),
+    yield takeEvery('DELETE_ID_ANSWER', deleteAnswer),
     userSaga(),
     loginSaga(),
 
@@ -34,7 +37,35 @@ export default function* rootSaga() {
     }
     
   }
+// gets all questions and posts get questions page
+   function* getAnotherQuestion(action){
+     console.log(action.payload);
+     try{
+      const IndQuestion = yield call(axios.get,`/api/trick/allQuestions/${action.payload}`)
+      yield dispatch({
+        type:'GET_IND_QUESTION',
+        payload: IndQuestion.data
+      })
 
+     }catch(err){
+
+     }
+   }
+// gets questions and posts on user page
+  function* userQuestions(){
+    try{
+      const userStuff = yield call(axios.get, '/api/trick/username')
+      yield dispatch({
+        type:'GET_STUFF',
+        payload: userStuff.data
+      })
+    }catch(err){
+      console.log(err);
+      
+    }
+    
+  }
+// get all anwsers on the question page
   function* getAnswers(action){
     let id = action.payload
     console.log('Question id:', id);
@@ -50,7 +81,7 @@ export default function* rootSaga() {
       
     }
   }
-
+// post a answer on the question page
   function* postAnswer(action){
     console.log('posted answer',action.payload.id);
     let id = action.payload.id
@@ -67,7 +98,7 @@ export default function* rootSaga() {
     }
     
   }
-
+//get list of  questions from a query search
   function* getQuestions(action){  
     let userInput = action.payload.userInput
     console.log(userInput);
@@ -84,7 +115,7 @@ export default function* rootSaga() {
       }
   }
 
-
+//posts a questions
   function* postQuestion(action){
     console.log('posted question', action.payload);
     try{
@@ -95,31 +126,57 @@ export default function* rootSaga() {
     }
    
   }
-
+// deletes question
   function* deleteQuestion(action){
     console.log('here it is', action.payload.questionId);
     let question_id = action.payload.questionId
     try{
       yield call(axios.delete,`/api/trick/${question_id}`)
     }catch(err){
-
+      console.log(err);
+      
     }
   }
 
-
-// function* postPicture(fd){
-//   console.log('Grabbing Profile Picture');
-  
-  
-//     try{
+  function* deleteAnswer(action){
+    let answerId = action.payload.id
+    let questionId = action.payload.questionId
+    console.log('here is my answer id;', answerId);
+    try{
+      yield call(axios.delete, `/api/trick/answerDelete/${answerId}`)
+      const indQuestionAnswer = yield call(axios.get, `/api/trick/response/${questionId}`)
+      yield dispatch({
+        type:'GET_IND_QUESTION_ANSWER',
+        payload: indQuestionAnswer.data
+      })
+    }catch(err){
+      console.log(err);
       
-//       let fd = new FormData();
-//       fd.append('image', this.state.profile_picture, this.state.profile_picture.name)
-//       console.log(fd);
-//       const pictureRes = yield call(axios.put, `/api/trick/profilePic/`,fd);
-//       // will need a get request here eventually
-//     } catch(err){
-//       yield console.log(err);
-//     }
+    }
+  }
 
+function* postPicture(){
+  console.log('Grabbing Profile Picture');
+  // const apikey = 'ARzYlU4xfRaiK1QMTe6Qpz';
+  // const client = filestack.init(apikey);
+  
+    try{
+      
+      
+    } catch(err){
+      
+    }
+
+}
+
+
+// try{
+      
+//   let fd = new FormData();
+//   fd.append('image', this.state.profile_picture, this.state.profile_picture.name)
+//   console.log(fd);
+//   const pictureRes = yield call(axios.put, `/api/trick/profilePic/`,fd);
+//   // will need a get request here eventually
+// } catch(err){
+//   yield console.log(err);
 // }

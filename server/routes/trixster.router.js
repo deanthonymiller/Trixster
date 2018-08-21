@@ -20,9 +20,9 @@ router.get('/',  (req, res) => {
 });
 
 router.get('/response/:id', (req, res) => {
-        console.log(req.params.id);
+        console.log('itsall here', req.params.id);
         
-    let queryText = `SELECT * FROM "response" WHERE "questions_id" = $1;`
+    let queryText = `SELECT * FROM "response" WHERE "questions_id"  = $1 ORDER BY "id" ASC`
     pool.query(queryText, [req.params.id]).then((results) => {
         res.send(results.rows)
         console.log(results.rows);
@@ -33,7 +33,48 @@ router.get('/response/:id', (req, res) => {
     })
 });
 
+// router.get('/afterDelete/:id', (req, res) => {
+//     console.log('its all here', req.params.id);
+        
+//     let queryText = `SELECT * FROM "response" WHERE "person_id" = $1 ORDER BY "id" ASC`
+//     pool.query(queryText, [req.params.id]).then((results) => {
+//         res.send(results.rows)
+//         console.log(results.rows);
+        
+//     }).catch((err) =>{
+//         console.log(err);
+//         res.sendStatus(500)
+//     })
+// });
 
+router.get('/username', (req, res) => {
+    console.log('got something:',req.user.id);
+    if(req.isAuthenticated){
+        const queryText = `SELECT * FROM questions WHERE "person_id" = $1;`;
+        pool.query(queryText, [req.user.id]).then((results) =>{
+            res.send(results.rows);
+            console.log(results.rows);
+        }).catch((err) => {
+            console.log(err);
+            res.sendStatus(500)
+        })
+    }
+})
+
+
+router.get('/allQuestions/:id', (req, res) => {
+    console.log('got something:',req.params.id);
+    if(req.isAuthenticated){
+        const queryText = `SELECT * FROM questions WHERE questions."id" = $1;`;
+        pool.query(queryText, [req.params.id]).then((results) =>{
+            res.send(results.rows);
+            console.log(results.rows);
+        }).catch((err) => {
+            console.log(err);
+            res.sendStatus(500)
+        })
+    }
+})
 
 router.get('/question/:id', (req, res) => {
         console.log(req.params.id);
@@ -96,7 +137,9 @@ router.delete('/:id', (req, res) => {
         const queryText = `DELETE FROM "questions" WHERE questions."id" = $1 AND "person_id" = $2;`;
         pool.query(queryText,[req.params.id , req.user.id])
         .then(() => {
-            res.sendStatus(200);
+            res.sendStatus(201);
+            console.log('I work!');
+            
         }).catch((err) => {
             console.log('error deleting', err);
             res.sendStatus(500)
@@ -104,6 +147,19 @@ router.delete('/:id', (req, res) => {
     }
 })
 
+router.delete('/answerDelete/:id', (req, res) => {
+    console.log(req.params.id);
+    if(req.isAuthenticated){
+        const queryText = `DELETE  FROM response WHERE response."id" = $1 AND "person_id" = $2;`;
+        pool.query(queryText, [req.params.id, req.user.id]).then(() => {
+            res.sendStatus(201)
+            console.log('deleting');
+        }).catch((err) => {
+            console.log('problem in router answer delete', err);
+            res.sendStatus(500)
+        })
+    }
+})
 router.put('/profilePic/:id', (req, res) => {
     console.log('got to put', req.body);
     if(req.isAuthenticated()){
