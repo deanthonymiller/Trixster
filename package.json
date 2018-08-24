@@ -5,6 +5,7 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@material-ui/core": "^1.5.0",
+    "@material-ui/icons": "^2.0.3",
     "@uppy/core": "^0.27.0",
     "@uppy/react": "^0.27.1",
     "axios": "^0.17.1",
@@ -29,6 +30,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-material-icon-svg": "^1.6.1",
     "react-materialize": "^2.4.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",

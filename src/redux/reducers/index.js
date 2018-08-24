@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import login from './loginReducer';
-import { deflate } from 'zlib';
+// import { deflate } from 'zlib';
 
 const questionItems = (state = [{}], action) => {
   switch(action.type){
@@ -22,15 +22,15 @@ const questionItems = (state = [{}], action) => {
   }
  }
 
- const indQuestion = (state = [], action) => {
-   switch(action.type){
+//  const indQuestion = (state = [], action) => {
+//    switch(action.type){
      
-    case 'POST_QUESTION':
-    return [...state, action.payload]
-  default:
-    return state
-   }
- }
+//     case 'POST_QUESTION':
+//     return [...state, action.payload]
+//   default:
+//     return state
+//    }
+//  }
 
 const correctStuff = (state = [{}], action) =>{
   switch( action.type){
@@ -50,7 +50,7 @@ const correctStuff = (state = [{}], action) =>{
    }
  }
 
- const userQuestions = ( state = [{}], action) =>{
+ const userQuestions = ( state = [], action) =>{
   switch(action.type){
     case 'GET_STUFF':
       return action.payload
@@ -59,6 +59,34 @@ const correctStuff = (state = [{}], action) =>{
     
   }
  }
+ 
+ const profileQuestions = ( state =[{}], action) => {
+  switch(action.type){
+    case 'PROFILE_QUESTIONS':
+     return state
+    default:
+     return state 
+  }
+ }
+
+ const getProfilePicture = ( state = [{}], action) => {
+   switch(action.type){
+     case 'GET_PROFILE_PICTURE':
+      return action.payload
+     default:
+      return state 
+   }
+ }
+
+ const getAllBioStuff = ( state =[{}], action) =>{
+   switch(action.type){
+     case 'GET_PROFILE_BIO':
+      return action.payload
+    default:
+      return state
+   }
+ }
+ 
 
 const store = combineReducers({
   user,
@@ -66,7 +94,10 @@ const store = combineReducers({
   questionItems,
   answerItems,
   userQuestions,
-  correctStuff
+  correctStuff,
+  getProfilePicture,
+  profileQuestions,
+  getAllBioStuff
 });
 
 export default store;

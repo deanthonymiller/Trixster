@@ -97,6 +97,7 @@ class IndQuestionPage extends Component{
                 id
            } 
         })
+        alert('Thanks for answering !')
     }
 
     deleteQuestion = (id) =>{
@@ -149,11 +150,17 @@ class IndQuestionPage extends Component{
 
 
     const answerOfQuestion = this.props.state.answerItems.map((answer, index) => {
+ 
+
+       
         return <div key={index}>
                  <br /> 
-                <Card className={this.props.classes.color}> {answer.comments}</Card>
+                <Card className={this.props.classes.color}> {answer.comments}
+                </Card>
+                
              
                 <button onClick={this.deleteAnswer.bind(this, answer.id)}>delete</button>
+               
                 <br />
             
                </div>

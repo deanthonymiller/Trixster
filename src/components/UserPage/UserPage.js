@@ -2,35 +2,63 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Nav from '../../components/Nav/Nav';
 import '../../styles/main.css'
-import * as filestack from 'filestack-js';
+
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { triggerLogout } from '../../redux/actions/loginActions';
 import { withStyles } from '@material-ui/core';
-
-
+import ImageUpload from '../ImageUpload/ImageUpload'
+import Card from '@material-ui/core/Card';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Edit from '@material-ui/icons/Edit';
+import Done from '@material-ui/icons/Done';
 const mapStateToProps = state => ({
   user: state.user,
   state
 });
 const styles = theme => ({
   center:{
-    paddingLeft: '1000px'
-  }
+    paddingLeft: '1000px',
+    float: 'left',
+    position: 'absolute'
+  },
+  picture:{
+    height: '300px',
+    width:'400px',
+    borderRadius: '10px',
+    paddingTop: 'absolute'
+  },
+  askQuestion:{
+    textDecoration: 'underline',
+  },
+    input:{
+      width:'350px',
+    },
+   
 })
 
 class UserPage extends Component {
   constructor(props){
     super(props)
-    this.state ={
-      file:''
+    this.state = {
+      toggle:{
+        show: false,
+        done: true,
+      },
+     bioText:''
+    }
     
-  }
-}
+ }
   componentDidMount() {
+    //fetching user
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-    this.props.dispatch({
-      type:'GET_USER_QUESTIONS'
-    })
+    //getting user questions on user page
+    //getting user profile picture
+    this.props.dispatch({type:'GET_PICTURE'})
+    this.props.dispatch({type:'GET_BIO'})
+    console.log(this.props.state.getProfilePicture);
+    this.props.dispatch({ type:'GET_USER_QUESTIONS'})
   }
 
   componentDidUpdate() {
@@ -44,48 +72,86 @@ class UserPage extends Component {
     // this.props.history.push('home');
   }
     handleChangeFor = (propertyName) => (event) =>{
-      console.log(event.target.files[0]);
         this.setState({
-          update: {
-            profile_picture: event.target.files[0]
-          }
+          ...this.state,
+         [propertyName]: event.target.value
+          
         });
     }
 
-    getUserQuestions = () => {
-     console.log(this.props.state.userQuestions);
-     
+  updateBio = () => {
+this.props.dispatch({
+  type:'UPDATE_BIO',
+  payload: this.state
+})
+  
+    this.props.dispatch({
+      type:'GET_BIO'
+    })
+  }
+
+    editBio = () => {
+      console.log(this.state.show);
+      this.setState(prevState => ({
+        toggle:{
+          show: !prevState.toggle.show
+        }
+    
+      }));
     }
 
+  toggleButtons = () =>{
+    this.setState(prevState =>({
+      toggle:{
+        done: !prevState.toggle.done
+      }
+    }))
+    this.updateBio()
+  }
 
-    postPicture = () =>{
-  const apiKey = 'ARzYlU4xfRaiK1QMTe6Qpz';
-  const client = filestack.init(apiKey);
-  let file = this.state
-
-
-  client.upload(file)
-  .then(res => {
-    console.log('success:', res);
-  }).catch(err => {
-    console.log(err);
-    
-  })
-      
-    }
-    
   render() {
 
     const userQuest = this.props.state.userQuestions.map((question, index) => {
         return <div key={index} >
-            <div className={this.props.classes.center } onClick={()=> this.props.history.push(`/question/${question.id}`)}>
+          <br/>
+            <Card  onClick={()=> this.props.history.push(`/question/${question.id}`)}>
               {question.question_text}              
-            </div>
-              
-             
-            
+            </Card>  
         </div>
     })
+  
+
+    let editButtons = null
+
+    if( this.state.toggle.show === true){
+      editButtons = (
+        <div>
+          <TextField 
+            type="text"
+            placeholder="Who are you?" 
+            className={this.props.classes.input }
+            onChange={this.handleChangeFor('bioText')}
+            multiline={true}
+           />
+           {/* <p>{JSON.stringify(this.state.bioText)}</p> */}
+           <div>
+          <ImageUpload/>
+          <IconButton variant="fab" onClick={this.toggleButtons}> <Done /> </IconButton>
+          </div>
+        </div>
+       
+          
+      )
+    }
+    let edit = null
+if(this.state.toggle.done === true){
+  
+  edit =(
+    <div>
+      <IconButton onClick={this.editBio}><Edit /></IconButton>
+    </div>
+  )
+}
 
 
 
@@ -94,40 +160,43 @@ class UserPage extends Component {
     if (this.props.user.userName) {
       content = (
         <div>
-          <h1
-            id="welcome"
-          >
+          <h1 id="welcome">
             Welcome, { this.props.user.userName }!
-          </h1>
-          <p>Your ID is: {this.props.user.id}</p>
-          
+          </h1>  
         </div>
       );
     }
 
+    let bio = this.props.state.getAllBioStuff[0].profile_bio
+
+
     return (
       <div className="nav">
-       
         <Nav />
-      
         { content }
-       <div>
-       <div className="container">
-   
-  </div>
-         <section>
-              <img src={this.state.profile_picture} alt=""/>
-              <br />
-              <input type="file" onChange={this.handleChangeFor('file')}/>
-              <button onClick={this.postPicture}>Upload</button>
-              <button onClick={this.getUserQuestions}>go</button>
-             
-          
-          {userQuest}
-          </section>
-          <button onClick={this.postPicture}></button>
-       </div>
+      
+  
+
+  <aside className={this.props.classes.center }>
+      <h2 className={this.props.classes.askQuestion }>Asked Questions</h2>
+            {userQuest}
+  </aside>
+       
+        
+         <div className={this.props.classes.position }>
+       
+         <img className={this.props.classes.picture } src={this.props.state.getProfilePicture[0].profile_picture} alt="Picture of DeaAnthony"/> 
+          {editButtons}
+         
+
+          </div>  
+       <section>
+         {/* <p>{JSON.stringify(this.props.state.getProfilePicture[0].profile_bio)}</p> */}
+         {bio}
+         {edit}
+       </section>
       </div>
+      
     );
   }
 }

@@ -32,25 +32,25 @@ router.get('/response/:id', (req, res) => {
         res.sendStatus(500)
     })
 });
+router.get('/profile_pic', (req, res) => {
+    console.log('its all here', req.user.id);
+        
+    let queryText = `SELECT * FROM person WHERE person."id" = $1;`
+    pool.query(queryText, [req.user.id]).then((results) => {
+        res.send(results.rows)
+        console.log(results.rows);
+        
+    }).catch((err) =>{
+        console.log(err);
+        res.sendStatus(500)
+    })
+});
 
-// router.get('/afterDelete/:id', (req, res) => {
-//     console.log('its all here', req.params.id);
-        
-//     let queryText = `SELECT * FROM "response" WHERE "person_id" = $1 ORDER BY "id" ASC`
-//     pool.query(queryText, [req.params.id]).then((results) => {
-//         res.send(results.rows)
-//         console.log(results.rows);
-        
-//     }).catch((err) =>{
-//         console.log(err);
-//         res.sendStatus(500)
-//     })
-// });
 
 router.get('/username', (req, res) => {
     console.log('got something:',req.user.id);
     if(req.isAuthenticated){
-        const queryText = `SELECT * FROM questions WHERE "person_id" = $1;`;
+        const queryText = `SELECT * FROM questions WHERE "person_id" = $1 LIMIT 3;`;
         pool.query(queryText, [req.user.id]).then((results) =>{
             res.send(results.rows);
             console.log(results.rows);
@@ -160,19 +160,39 @@ router.delete('/answerDelete/:id', (req, res) => {
         })
     }
 })
-router.put('/profilePic/:id', (req, res) => {
-    console.log('got to put', req.body);
-    if(req.isAuthenticated()){
-        const queryText = `UPDATE "person" SET "profile_picture"= $1 WHERE "id" = $2;`;
-        pool.query(queryText, [req.body.profile_picture,req.params.id])
-        .then(() => {res.sendStatus(200); })
+
+router.put('/', (req, res) => {
+    console.log('got to put', req.body.url);
+    if(req.isAuthenticated){
+        const queryText = `UPDATE "person" SET "profile_picture" = $1 WHERE "id" = $2;`;
+        pool.query(queryText, [req.body.url, req.user.id])
+        .then(() => {
+            res.sendStatus(200); 
+        })
         .catch((err) => {
-            console.log('Error updating Profile', err);
+            console.log('Error updating Profile picture', err);
             res.sendStatus(500)
         })
     }else{
         res.sendStatus(403);
     }
 })
+
+    router.put('/bio/:id', (req, res) => {
+        console.log('got to put', req.params.id);
+        if(req.isAuthenticated){
+            const queryText = `UPDATE person SET "profile_bio" = $1 WHERE "id" = $2`
+            pool.query(queryText, [req.params.id, req.user.id])
+            .then(() => {
+                res.sendStatus(201)
+                
+            }).catch((err) => {
+                console.log('error updating bio', err);
+                res.sendStatus(500)
+            })
+        }else{
+            res.sendStatus(403)
+        }
+    })
 
 module.exports = router;

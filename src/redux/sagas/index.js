@@ -16,13 +16,43 @@ export default function* rootSaga() {
     yield takeEvery('GET_USER_QUESTIONS', userQuestions),
     yield takeEvery('ANOTHER_QUESTION', getAnotherQuestion),
     yield takeEvery('DELETE_ID_ANSWER', deleteAnswer),
+    yield takeEvery('UPDATE_PROFILE', updatePicture),
+    yield takeEvery('GET_PICTURE', getProfilePic),
+    yield takeEvery('UPDATE_BIO', updateBio),
+    yield takeEvery('GET_BIO', getBio),
+
     userSaga(),
     loginSaga(),
 
     // watchIncrementAsync()
   ]);
 }
+function* getBio(action){
+  try{
+    const bio = yield call(axios.get, '/api/trick/profile_pic')
+    yield dispatch({
+      type:'GET_PROFILE_BIO',
+      payload: bio.data
+    })
+  }catch(err){
+
+  }
+}
+
   
+function* getProfilePic(action){
+ try{
+    const picture = yield call(axios.get, '/api/trick/profile_pic')
+      yield dispatch({
+        type:'GET_PROFILE_PICTURE',
+        payload: picture.data
+      })
+   }catch(err){
+      console.log(err);
+      
+    }
+}
+
   function* getThisQuestion(action){
     console.log(action.payload);
     
@@ -120,6 +150,9 @@ export default function* rootSaga() {
     console.log('posted question', action.payload);
     try{
       yield call(axios.post, '/api/trick/', action.payload)
+      // yield dispatch({
+      //   type:''
+      // })
     }catch(err){
       console.log(err);
       
@@ -132,6 +165,9 @@ export default function* rootSaga() {
     let question_id = action.payload.questionId
     try{
       yield call(axios.delete,`/api/trick/${question_id}`)
+      yield dispatch({
+          type:'PROFILE_QUESTIONS'
+      })
     }catch(err){
       console.log(err);
       
@@ -155,28 +191,33 @@ export default function* rootSaga() {
     }
   }
 
-function* postPicture(){
-  console.log('Grabbing Profile Picture');
-  // const apikey = 'ARzYlU4xfRaiK1QMTe6Qpz';
-  // const client = filestack.init(apikey);
-  
+function* updatePicture(action){
+  console.log('Grabbing Profile Picture', action.payload.url);
     try{
-      
-      
+    yield call(axios.put, `/api/trick/`, action.payload)
+      yield dispatch({
+        type:'GET_PICTURE'
+      })
     } catch(err){
+      console.log(err);
       
     }
-
 }
 
-
-// try{
-      
-//   let fd = new FormData();
-//   fd.append('image', this.state.profile_picture, this.state.profile_picture.name)
-//   console.log(fd);
-//   const pictureRes = yield call(axios.put, `/api/trick/profilePic/`,fd);
-//   // will need a get request here eventually
-// } catch(err){
-//   yield console.log(err);
-// }
+function* updateBio(action){
+  console.log('im at the saga', action.payload);
+  let bio = action.payload.bioText
+  console.log(bio);
+  
+  try{
+   const myBio = yield call(axios.put, `/api/trick/bio/${bio}`)
+   yield dispatch({
+     type:'GET_BIO',
+    
+   })
+  }catch(err){
+    console.log(err);
+    
+  }
+  
+}

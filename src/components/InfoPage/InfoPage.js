@@ -42,6 +42,8 @@ class InfoPage extends Component {
       payload: this.state
       
     })
+
+    
     this.props.history.push('/user')
   }
 
@@ -76,7 +78,7 @@ class InfoPage extends Component {
             <br />
             <button onClick={this.addQuestion}>Post!</button>
           </div>
-           <p>{JSON.stringify(this.state.type_of_sport)}</p>
+           {/* <p>{JSON.stringify(this.state.type_of_sport)}</p> */}
         </div>
       );
     }
