@@ -91,7 +91,19 @@ router.get('/question/:id', (req, res) => {
             })
 })
 
-
+router.get('/getMeetUps', (req, res) => {
+    console.log('its here', req.body);
+    
+let queryText = `SELECT * FROM meet_ups WHERE "person_id"  = $1;`;
+pool.query(queryText, [req.user.id]).then((results) => {
+    res.send(results.rows)
+    console.log(results.rows);
+    
+}).catch((err) =>{
+    console.log(err);
+    res.sendStatus(500)
+})
+});
 
 /**
  * POST route template
@@ -114,6 +126,7 @@ router.post('/', (req, res) => {
     }
 });
 
+
 router.post('/answer', (req, res) => {
     console.log(req.body);
     if(req.isAuthenticated){
@@ -128,8 +141,25 @@ router.post('/answer', (req, res) => {
     }
 })
 
+router.post('/meetup', (req, res) => {
+    console.log('got to post', req.body);
+    if(req.isAuthenticated){
+        const newMeetUp = req.body
+        const queryText = `INSERT INTO "meet_ups" ("meet_up_text", "meet_up_location", "person_id") VALUES ($1, $2, $3)`
+        pool.query(queryText, [newMeetUp.meet_up_text, newMeetUp.meet_up_location, req.user.id ])
+            .then(() => {
+                res.sendStatus(200);
+            })
+                .catch((err) => {
+                    console.log(err);
+                    res.sendStatus(500)
+                })
+    }else{
+        res.sendStatus(403)
+    }
+});
 router.delete('/:id', (req, res) => {
-    console.log(req.params.id);
+    console.log('hello',req.params.id);
     console.log(req.user.id);
     
     
@@ -192,6 +222,35 @@ router.put('/', (req, res) => {
             })
         }else{
             res.sendStatus(403)
+        }
+    })
+
+    router.put('/likes', (req, res) => {
+        console.log(req.body);
+        if(req.isAuthenticated){
+            const queryText = `UPDATE questions SET "question_likes" = $1 WHERE "id" = $2;`;
+            pool.query(queryText, [req.body.questionLike, req.body.id]).then(() => {
+                res.sendStatus(201)
+            })
+       }else{
+            res.sendStatus(403)
+        }
+    })
+
+    router.put('/meetUpPhoto', (req, res) => {
+        console.log('got to put', req.body);
+        if(req.isAuthenticated){
+            const queryText = `UPDATE "meet_ups" SET "meet_up_photo" = $1 WHERE "id" = $2;`;
+            pool.query(queryText, [req.body.url, req.user.id])
+            .then(() => {
+                res.sendStatus(200); 
+            })
+            .catch((err) => {
+                console.log('Error updating Profile picture', err);
+                res.sendStatus(500)
+            })
+        }else{
+            res.sendStatus(403);
         }
     })
 

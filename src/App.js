@@ -14,6 +14,8 @@ import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
 import SearchResults  from './components/SearchResults/SearchResults'
 import IndQuestionPage from './components/IndQuestionPage/IndQuestionPage'
+import MeetUps from './components/Meetups/MeetUps'
+import IndMeetUp from './components/Meetups/IndMeetUp'
 import './styles/main.css';
 
 const App = () => (
@@ -50,7 +52,14 @@ const App = () => (
           path="/question/:id"
           component={IndQuestionPage}
         />
-        
+         <Route
+          path="/meetup"
+          component={MeetUps}
+        />
+         <Route
+          path="/indMeetUp"
+          component={IndMeetUp}
+        />
         {/* OTHERWISE (no path!!!) */}
         <Route render={() => <h1>404</h1>} />
 

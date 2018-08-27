@@ -14,6 +14,11 @@ const Nav = () => (
           <Link to="/info">
             Post a Question
           </Link>
+        </li>
+        <li>
+          <Link to="/meetup">
+            Post a Meet-up
+          </Link>
           
         </li>
       </ul>

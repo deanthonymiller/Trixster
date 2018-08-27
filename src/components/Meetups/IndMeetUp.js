@@ -58,7 +58,7 @@ const styles = theme => ({
 
 
 
-class IndQuestionPage extends Component{
+class IndMeetUp extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -103,7 +103,7 @@ class IndQuestionPage extends Component{
         let questionLike = this.props.state.correctStuff[0].question_likes += 1
         console.log(questionLike);
         this.props.dispatch({
-            type:'INCREMENT_ONE',
+            type:'INCREMENT_ONE_MEETUP',
             payload:{
                 questionLike, id
             }
@@ -122,6 +122,7 @@ class IndQuestionPage extends Component{
                 id
            } 
         })
+        alert('Thanks for answering !')
     }
 
     deleteQuestion = (id) =>{
@@ -139,9 +140,9 @@ class IndQuestionPage extends Component{
         console.log(id);
         let questionId = this.props.match.params.id
         this.props.dispatch({
-            type:'DELETE_ID_ANSWER',
+            type:'DELETE_MEET_UP_ANSWER',
             payload:{
-                id, questionId
+                
             } 
         })
        
@@ -214,4 +215,4 @@ class IndQuestionPage extends Component{
 }
 
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(IndQuestionPage)));
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(IndMeetUp)));

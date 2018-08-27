@@ -20,6 +20,10 @@ export default function* rootSaga() {
     yield takeEvery('GET_PICTURE', getProfilePic),
     yield takeEvery('UPDATE_BIO', updateBio),
     yield takeEvery('GET_BIO', getBio),
+    yield takeEvery('INCREMENT_ONE', oneLike),
+    yield takeEvery('POST_MEETUP', postMeetUp),
+    yield takeEvery('UPDATE_MEETUP_PHOTO', updateMeetUpPhoto),
+    yield takeEvery('GET_MY_MEET_UPS', getMyMeetUps),
 
     userSaga(),
     loginSaga(),
@@ -27,6 +31,21 @@ export default function* rootSaga() {
     // watchIncrementAsync()
   ]);
 }
+
+function* getMyMeetUps(action){
+  try{
+    const getMeetups = yield call(axios.get,'/api/trick/getMeetUps')
+    yield dispatch({
+      type:'GETTING_MEETUP',
+      payload: getMeetups.data
+    })
+    
+  }catch(err){
+
+  }
+}
+
+
 function* getBio(action){
   try{
     const bio = yield call(axios.get, '/api/trick/profile_pic')
@@ -145,6 +164,18 @@ function* getProfilePic(action){
       }
   }
 
+//post meet up
+function* postMeetUp(action){
+  console.log(action.payload);
+  try{
+    yield call(axios.post, '/api/trick/meetup', action.payload)
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
+
 //posts a questions
   function* postQuestion(action){
     console.log('posted question', action.payload);
@@ -161,7 +192,7 @@ function* getProfilePic(action){
   }
 // deletes question
   function* deleteQuestion(action){
-    console.log('here it is', action.payload.questionId);
+    console.log('here it is', action.payload);
     let question_id = action.payload.questionId
     try{
       yield call(axios.delete,`/api/trick/${question_id}`)
@@ -220,4 +251,35 @@ function* updateBio(action){
     
   }
   
+}
+
+function* oneLike(action){
+  let question_id = action.payload.id
+  let question_like = action.payload.questionLike
+  console.log(question_like);
+  console.log(question_id);
+
+  try{
+    const likes =  yield call(axios.put, `/api/trick/likes/`, action.payload)
+    yield dispatch({
+     type:'GET_THIS_QUESTION',
+     payload: question_id
+    })
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
+function* updateMeetUpPhoto(action){
+  console.log('Grabbing Meet_up Photo', action.payload.url);
+    try{
+    yield call(axios.put, `/api/trick/meetUpPhoto`, action.payload)
+      // yield dispatch({
+      //   type:'GET_PICTURE'
+      // })
+    } catch(err){
+      console.log(err);
+      
+    }
 }

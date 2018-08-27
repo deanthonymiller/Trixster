@@ -87,6 +87,14 @@ const correctStuff = (state = [{}], action) =>{
    }
  }
  
+ const getMeetUp = (state =[{}], action) => {
+   switch(action.type){
+     case 'GETTING_MEETUP':
+      return action.payload
+    default:
+      return state  
+   }
+ }
 
 const store = combineReducers({
   user,
@@ -97,7 +105,8 @@ const store = combineReducers({
   correctStuff,
   getProfilePicture,
   profileQuestions,
-  getAllBioStuff
+  getAllBioStuff,
+  getMeetUp
 });
 
 export default store;

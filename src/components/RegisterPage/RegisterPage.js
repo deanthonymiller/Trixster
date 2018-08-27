@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import TextField from '@material-ui/core/TextField';
+import { withStyles, Icon } from '@material-ui/core';
+
+
 import axios from 'axios';
 
+const styles = theme => ({
+  form:{
+    height:'300px'
+  }
+})
 class RegisterPage extends Component {
   constructor(props) {
     super(props);
@@ -77,12 +86,12 @@ class RegisterPage extends Component {
     return (
       <div>
         {this.renderAlert()}
-        <form onSubmit={this.registerUser}>
+        <form onSubmit={this.registerUser} className={this.props.classes.form}>
           <h2>Register User</h2>
           <div>
             <label htmlFor="username">
               Username:
-              <input
+              <TextField
                 type="text"
                 name="username"
                 value={this.state.username}
@@ -93,7 +102,7 @@ class RegisterPage extends Component {
           <div>
             <label htmlFor="password">
               Password:
-              <input
+              <TextField
                 type="password"
                 name="password"
                 value={this.state.password}
@@ -104,7 +113,7 @@ class RegisterPage extends Component {
           <div>
             <label htmlFor="first_name">
               First Name:
-              <input
+              <TextField
                 type="first_name"
                 name="first_name"
                 value={this.state.first_name}
@@ -115,7 +124,7 @@ class RegisterPage extends Component {
           <div>
             <label htmlFor="last_name">
               Last Name:
-              <input
+              <TextField
                 type="last_name"
                 name="last_name"
                 value={this.state.last_name}
@@ -126,7 +135,7 @@ class RegisterPage extends Component {
           <div>
             <label htmlFor="email">
               Email address:
-              <input
+              <TextField
                 type="email"
                 name="email"
                 value={this.state.email}
@@ -137,7 +146,8 @@ class RegisterPage extends Component {
           <div>
             <label htmlFor="city_state">
               City & State
-              <input
+              <TextField
+                // label='city & state'
                 type="city_state"
                 name="city_state"
                 value={this.state.city_state}
@@ -159,5 +169,5 @@ class RegisterPage extends Component {
   }
 }
 
-export default RegisterPage;
+export default (withStyles(styles)(RegisterPage));
 

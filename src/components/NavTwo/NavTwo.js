@@ -3,6 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import TextField from '@material-ui/core/TextField';
+import Send from '@material-ui/icons/Send';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 // import createHistory from 'history/createBrowserHistory'
 
 import '../NavTwo/navTwo.css'
@@ -76,15 +82,16 @@ class NavTwo extends Component{
 
   <div className="nav">
     <div className={this.props.classes.bar}>
-        <input className='search' onChange={this.handleChangeForSearch('userInput')}  placeholder="search"/>
-     
+        <TextField label='search' onChange={this.handleChangeForSearch('userInput')} />
+        
         {/* <select>
             <option></option>
             <option selected>Snowboarding</option>
              <option>Skateboarding</option>
         </select> */}
-        <button  onClick={this.handleGoButton}>Go!</button>
-        
+         <Tooltip title="search">
+        <IconButton  onClick={this.handleGoButton}><Send/></IconButton>
+        </Tooltip>
     </div>
     {/* <p>{JSON.stringify(this.state.userInput)}</p> */}
   </div>

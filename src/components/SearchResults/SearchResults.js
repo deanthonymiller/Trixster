@@ -14,7 +14,7 @@ const mapStateToProps = state =>({
 const styles = theme => ({
     card:{
         width: 350,
-        height: 200,
+        height: 100,
         margin: '30px',
         float: 'left'
 ,        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
@@ -53,7 +53,6 @@ let questionList = this.props.state.questionItems.map((question, index) => {
                 
                 <li className="card" >
                 {question.question_text}
-                {question.id}
                 </li>
                 
                </Card>

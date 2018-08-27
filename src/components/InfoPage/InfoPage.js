@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import '../InfoPage/infopage.css'
 import { connect } from 'react-redux';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Send from '@material-ui/icons/Send';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import FormControl from '@material-ui/core/FormControl';
+
 
 import Nav from '../../components/Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import { Icon } from '@material-ui/core';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -61,26 +72,38 @@ class InfoPage extends Component {
             Ask a Question
           </h1>
           <div>
-            <textarea className="title" onChange={this.handleChangeInput('question_title')} type="text" placeholder="title" />
+            
+            <TextField className="title" onChange={this.handleChangeInput('question_title')} type="text" label="title" />
             <br />
             <br />
-            <textarea className="question" onChange={this.handleChangeInput('question_text')} type="text" placeholder="Question" />
+            <TextField className="question" 
+            onChange={this.handleChangeInput('question_text')}
+            multiline={true}
+             type="text" label="Question" />
+          
+            <br />
+            
+           <FormControl>
+           <InputLabel htmlFor="demo-controlled-open-select">Choose a Sport</InputLabel>
+            <Select className="sport" 
+            value={this.state.type_of_sport}
+            onChange={this.handleChangeInput('type_of_sport')}type="text" 
+            label="type of Sport">
+            <MenuItem value="snowboarding">Snowboarding</MenuItem>
+            <MenuItem value="rollerBlade">Rollerblade</MenuItem>
+            <MenuItem value="skateboarding">Skateboarding</MenuItem>
+            <MenuItem value="bmx">Bmx</MenuItem>
+            </Select>
+            </FormControl>
             <br />
             <br />
-            <select className="sport" onChange={this.handleChangeInput('type_of_sport')}type="text" placeholder="type of Sport"> 
-            <option selected>chose a sport</option>
-            <option value="snowboarding">Snowboarding</option>
-            <option value="rollerBlade">Rollerblade</option>
-            <option value="skateboarding">Skateboarding</option>
-            <option value="bmx">Bmx</option>
-            </select>
-            <br />
-            <br />
-            <button onClick={this.addQuestion}>Post!</button>
+            <Tooltip title="post!">
+            <IconButton onClick={this.addQuestion}><Send/></IconButton>
+            </Tooltip>
           </div>
            {/* <p>{JSON.stringify(this.state.type_of_sport)}</p> */}
         </div>
-      );
+      );  
     }
 
     return (

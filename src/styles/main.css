@@ -8,6 +8,8 @@ body {
 }
 
 .instructions {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     background-color: #00acb0;
     padding: 5px;
     color: #ece7e7;
@@ -50,7 +52,9 @@ input[type="submit"] {
 .navbar {
   background-color: #00acb0;
   width: 100%;
-  border-radius: 0px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px
+  
   
 }
 

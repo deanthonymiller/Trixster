@@ -13,6 +13,11 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Edit from '@material-ui/icons/Edit';
 import Done from '@material-ui/icons/Done';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 const mapStateToProps = state => ({
   user: state.user,
   state
@@ -24,18 +29,38 @@ const styles = theme => ({
     position: 'absolute'
   },
   picture:{
-    height: '300px',
-    width:'400px',
-    borderRadius: '10px',
-    paddingTop: 'absolute'
+    // height: '300px',
+    // width:'400px',
+    // borderRadius: '10px',
+    paddingTop: '56.25%',
+    paddingLeft:'56.25%'
+    
   },
   askQuestion:{
     textDecoration: 'underline',
+    
   },
     input:{
       width:'350px',
+      
     },
-   
+   bio:{
+    wordWrap: 'breakWord',
+    MaxWidth:'300px',
+   },
+   questionList:{
+     maxWidth:'300px'
+   },
+   position:{
+     height:'300',
+     width:'400px'
+   },
+   nav:{
+     margin: 'auto'
+   },
+   title:{
+     textDecoration: 'underline'
+   }
 })
 
 class UserPage extends Component {
@@ -59,6 +84,7 @@ class UserPage extends Component {
     this.props.dispatch({type:'GET_BIO'})
     console.log(this.props.state.getProfilePicture);
     this.props.dispatch({ type:'GET_USER_QUESTIONS'})
+    this.props.dispatch({type:'GET_MY_MEET_UPS'})
   }
 
   componentDidUpdate() {
@@ -113,13 +139,23 @@ this.props.dispatch({
 
     const userQuest = this.props.state.userQuestions.map((question, index) => {
         return <div key={index} >
-          <br/>
-            <Card  onClick={()=> this.props.history.push(`/question/${question.id}`)}>
+          <div className={this.props.classes.title}>{question.question_title}</div> 
+            <Card className={this.props.classes.questionList} onClick={()=> this.props.history.push(`/question/${question.id}`)}>
               {question.question_text}              
             </Card>  
+            <br />
         </div>
     })
   
+    const meetUps  = this.props.state.getMeetUp.map(( meetUp, index) => {
+      return <div key={index}>
+               <div className={this.props.classes.title}>{meetUp.meet_up_location}</div> 
+               {/* <Card className={this.props.classes.questionList} onClick={()=> this.props.history.push(`/question/${question.id}`)}> */}
+               <Card>
+              {meetUp.meet_up_text}              
+            </Card>   
+             </div>
+    })
 
     let editButtons = null
 
@@ -128,16 +164,24 @@ this.props.dispatch({
         <div>
           <TextField 
             type="text"
-            placeholder="Who are you?" 
+            placeholder="Who are you?"
             className={this.props.classes.input }
             onChange={this.handleChangeFor('bioText')}
             multiline={true}
+            
            />
            {/* <p>{JSON.stringify(this.state.bioText)}</p> */}
            <div>
           <ImageUpload/>
           <IconButton variant="fab" onClick={this.toggleButtons}> <Done /> </IconButton>
           </div>
+          {this.props.state.getProfilePicture[0].first_name}
+          <br />
+          {this.props.state.getProfilePicture[0].last_name}
+          <br />
+          {this.props.state.getProfilePicture[0].email}
+          <br />
+          {this.props.state.getProfilePicture[0].city_state}
         </div>
        
           
@@ -148,7 +192,9 @@ if(this.state.toggle.done === true){
   
   edit =(
     <div>
+      <Tooltip title="edit">
       <IconButton onClick={this.editBio}><Edit /></IconButton>
+      </Tooltip>
     </div>
   )
 }
@@ -174,25 +220,35 @@ if(this.state.toggle.done === true){
       <div className="nav">
         <Nav />
         { content }
-      
-  
-
   <aside className={this.props.classes.center }>
-      <h2 className={this.props.classes.askQuestion }>Asked Questions</h2>
+        
+        
+  <h2 className={this.props.classes.askQuestion }>Asked Questions</h2>
             {userQuest}
+
+            <hr/>
+            <h2 className={this.props.classes.askQuestion }>Your Post Meet-ups</h2> 
+         
+         {meetUps}
   </aside>
        
         
-         <div className={this.props.classes.position }>
-       
-         <img className={this.props.classes.picture } src={this.props.state.getProfilePicture[0].profile_picture} alt="Picture of DeaAnthony"/> 
-          {editButtons}
-         
-
-          </div>  
        <section>
-         {/* <p>{JSON.stringify(this.props.state.getProfilePicture[0].profile_bio)}</p> */}
+        <div>
+       <Card className={this.props.classes.position }>
+       <CardMedia className={this.props.classes.picture } image={this.props.state.getProfilePicture[0].profile_picture} alt="Picture of DeaAnthony"/> 
+       
+       <CardContent>
          {bio}
+       {editButtons}
+       </CardContent>
+        
+        </Card>
+
+        </div>  
+       {/* <p>{JSON.stringify(this.props.state.getProfilePicture[0].profile_bio)}</p> */}
+      
+        
          {edit}
        </section>
       </div>
