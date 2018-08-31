@@ -7,7 +7,7 @@ const Nav = () => (
       <ul>
         <li>
           <Link to="/user">
-            Profile Page
+             Home
           </Link>
         </li>
         <li>
