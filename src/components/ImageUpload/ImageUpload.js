@@ -19,7 +19,7 @@ class ImageUpload extends React.Component {
    constructor(props) {
        super(props);
        this.state = { file: '', imagePreviewUrl: '' };
-       this.apiKey = 'ARzYlU4xfRaiK1QMTe6Qpz'
+       this.apiKey = 'AYeVFaMCCRnO8UwG8ZqIAz'
        this.client = filestack.init(this.apiKey);
        this.options = {
            uploadInBackground: false,

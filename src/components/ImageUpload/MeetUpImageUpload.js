@@ -2,7 +2,7 @@ import React from 'react';
 import * as filestack from 'filestack-js';
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import AddAPhoto from '@material-ui/icons/AddAPhoto';

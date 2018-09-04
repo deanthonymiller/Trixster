@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import Nav from '../Nav/Nav'
 import TextField from '@material-ui/core/TextField';
 import { withStyles, IconButton, Icon } from '@material-ui/core';
+import * as filestack from 'filestack-js';
 import { connect } from 'react-redux'
 import MeetUpUpload from '../ImageUpload/MeetUpImageUpload'
 import Send from '@material-ui/icons/Send';
 import Tooltip from '@material-ui/core/Tooltip';
+import AddAPhoto from '@material-ui/icons/AddAPhoto';
+
 
 
 
@@ -30,11 +33,25 @@ const styles = theme => ({
 class MeetUps extends Component{
     constructor(props){
         super(props)
-        this.state = {
-            meet_up_text:'',
-            meet_up_location: ''
-        }
+        this.state = {meet_up_text:'', meet_up_location: ''};
+        this.apiKey = 'AYeVFaMCCRnO8UwG8ZqIAz'
+        this.client = filestack.init(this.apiKey);
+        this.options = {
+            uploadInBackground: false,
+            onUploadDone: this.addMeetUp
+        };
+        
     }
+
+    showFileData = (response) => {
+        //    console.log(response);
+           console.log(this.state);
+           this.props.dispatch({
+               type:'UPDATE_MEETUP_PHOTO',
+               payload: response.filesUploaded[0]
+         })
+       }
+
 
     handleChangeInput = (propertyName) => (event) =>{
         this.setState({
@@ -43,16 +60,25 @@ class MeetUps extends Component{
         })
       }
 
-      addMeetUp = () => {
+      addMeetUp = (response) => {
+          let state = this.state
+          let filesUploaded = response.filesUploaded
         this.props.dispatch({
           type:'POST_MEETUP',
-          payload: this.state
+          payload: {
+              state, filesUploaded
+          }
         })
-        this.props.history.push('/user')
+        // this.props.history.push('/user')
+        console.log(state, filesUploaded);
+        
     }
 
-    render(){
 
+
+
+    render(){
+        const { classes } = this.props;
 
 
 
@@ -83,6 +109,9 @@ class MeetUps extends Component{
          
             {/* <MeetUpUpload/> */}
             {/* <p>{JSON.stringify(this.state.meet_up_text)}</p> */}
+            <IconButton size="small" onClick={() => this.client.picker(this.options).open()} variant="contained" color="default" className={classes.button}>
+                  <AddAPhoto />
+               </IconButton>
             </div>
             
         )

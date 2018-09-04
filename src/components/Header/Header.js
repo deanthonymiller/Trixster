@@ -47,8 +47,23 @@ class Header extends Component{
     window.location.href= `/#/home`;
   
   }
-
+ 
   render(){
+    
+    let logout = null
+    if(this.props.user.userName){
+      logout = (
+        <div>
+          <Tooltip title="logout">
+             <IconButton
+            onClick={this.logout}
+          >
+            <ExitToApp/>
+          </IconButton>  
+          </Tooltip>      
+        </div>
+      )
+    }
 
     return(
       <div className="instructions">
@@ -57,13 +72,7 @@ class Header extends Component{
            
              <h1 className="lead">Trixster</h1> 
              <NavTwo />
-             <Tooltip title="logout">
-             <IconButton
-            onClick={this.logout}
-          >
-            <ExitToApp/>
-          </IconButton>  
-          </Tooltip>      
+           {logout}
          </div>
          
         </div>

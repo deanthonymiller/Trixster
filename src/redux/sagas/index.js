@@ -167,11 +167,11 @@ function* getProfilePic(action){
 //post meet up
 function* postMeetUp(action){
   console.log(action.payload);
-  try{
-    yield call(axios.post, '/api/trick/meetup', action.payload)
-  }catch(err){
-    console.log(err);
-  }
+  // try{
+  //   yield call(axios.post, '/api/trick/meetup', action.payload)
+  // }catch(err){
+  //   console.log(err);
+  // }
 }
 
 

@@ -150,11 +150,10 @@ this.props.dispatch({
     const meetUps  = this.props.state.getMeetUp.map(( meetUp, index) => {
       return <div key={index}>
                <div className={this.props.classes.title}>{meetUp.meet_up_location}</div> 
-               {/* <Card className={this.props.classes.questionList} onClick={()=> this.props.history.push(`/question/${question.id}`)}> */}
-               <Card>
+               <Card  onClick={()=> this.props.history.push(`/indMeetUp/${meetUp.id}`)}>
               {meetUp.meet_up_text}              
             </Card>   
-             </div>
+             </div> 
     })
 
     let editButtons = null
